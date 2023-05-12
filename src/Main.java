@@ -1,47 +1,47 @@
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+public class Node {
+    private String label;
+    private int weight = Integer.MAX_VALUE;
+    private HashMap<Node, Integer> links;
+    private Node prev = null;
+    private LinkedList<Node> minPath = new LinkedList<Node>();
 
-public class Main {
-    public static void main(String [] args){
-        Graph graph = new Graph();
-        // initial node
-        Node genesi = new Node("sender");
-        // intermediate nodes
-        Node a= new Node("A");
-        Node b= new Node("B");
-        Node c= new Node("C");
-        Node d= new Node("D");
-        Node e= new Node("E");
-        // final node
-        Node destruction= new Node("recipient");
-
-        //connect the nodes
-        genesi.link(a,2);
-        genesi.link(d,8);
-        a.link(b,6);
-        a.link(c,2);
-        b.link(destruction,5);
-        c.link(d,3);
-        c.link(e,9);
-        d.link(e,3);
-        e.link(destruction,1);
-
-        // add the knots to the scratch
-        graph.addHop(genesi);
-        graph.addHop(a);
-        graph.addHop(b);
-        graph.addHop(c);
-        graph.addHop(d);
-        graph.addHop(e);
-        graph.addHop(destruction);
-
-        // route calculation
-        graph.shortestPath(genesi);
-
-        // all shortest paths with hops
-        graph.getGraph().forEach((node)->{
-            System.out.println("Name: "+node.getLabel()+" Weight: "+node.getWeight()+" Path"+node.getMinPath());
-        });
+    public LinkedList<Node> getMinPath() {
+        return minPath;
     }
+
+    public void setMinPath(LinkedList<Node> path) {
+        minPath = path;
+    }
+
+    public HashMap<Node, Integer> getLinks() {
+        return links;
+    }
+
+    public Node(String label) {
+        this.label = label;
+        links = new HashMap<>();
+    }
+
+    public void link(Node nodo2, Integer weight) {
+        links.put(nodo2, weight);
+        nodo2.links.put(this, weight);
+    }
+
+    public int weightTo(Node n) {
+        return weight + links.get(n);
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
 }
